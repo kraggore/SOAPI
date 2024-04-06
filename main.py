@@ -13,8 +13,10 @@ cache = TTLCache(maxsize=1000, ttl=60)
 base_url = "https://api.stackexchange.com/"
 version = "2.3/"
 base_url += version
-answer_filter = "&filter=!)qYyqP4)Fr1HcPrf2Kg1"
-question_filter = "&filter=!)rmjGbcIo.qcDATmkC6j"
+tag_filter = "&filter=!)rmjGbcIo.qcDATmkC6j"
+question_filter = "&filter=!)qYyqP4)Fr1HcPrf2Kg1"
+answer_filter = "&filter=!3vByVnFcO_DdiR.Zm"
+
 
 
 def get_response(filters):
@@ -66,12 +68,20 @@ def hello(tag: str):
                         f'&sort=votes'
                         f'&tagged={tag}'
                         f'&site=stackoverflow'
-                        f'{question_filter}'
+                        f'{tag_filter}'
                         )
 
 
 @app.get("/questions/{q_id}/answers")
 def get_answers(q_id: str):
     return get_response(f'questions/{q_id}/answers?order=desc&sort=votes&site=stackoverflow'
+                        f'{question_filter}'
+                        )
+    
+
+@app.get("/answers/{a_id}")
+def get_answer(a_id: str):
+    return get_response(f'answers/{a_id}?order=desc&sort=activity&site=stackoverflow'
                         f'{answer_filter}'
                         )
+
